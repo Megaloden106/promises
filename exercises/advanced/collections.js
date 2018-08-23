@@ -10,7 +10,13 @@
 
 
 var combineFirstLineOfManyFiles = function(filePaths, writePath) {
- // TODO
+ // TO DO
+ console.log('---------------------')
+ console.log(filePaths);
+  // fs.readdir(dirname, function(err, filenames) {
+  //   console.log(filenames)
+  // })
+
 };
 
 // Export these functions so we can unit test them

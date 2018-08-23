@@ -19,7 +19,7 @@ var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
     .then(user => promisification.getGitHubProfileAsync(user))
     .then(body => new Promise((error, success) => {
       fs.writeFile(writeFilePath, JSON.stringify(body), function(err) {
-        err !== undefined ? error(err) : done();
+        err !== undefined ? error(err) : success();
       });
     }));
 };
