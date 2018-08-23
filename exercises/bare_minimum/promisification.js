@@ -1,14 +1,14 @@
 /**
  * Create the promise returning `Async` suffixed versions of the functions below,
  * Promisify them if you can, otherwise roll your own promise returning function
- */ 
+ */
 
 var fs = require('fs');
 var request = require('request');
 var crypto = require('crypto');
 var Promise = require('bluebird');
 
-// (1) Asyncronous HTTP request
+// (1) Asynchronous HTTP request
 var getGitHubProfile = function(user, callback) {
   var options = {
     url: 'https://api.github.com/users/' + user,
@@ -27,10 +27,27 @@ var getGitHubProfile = function(user, callback) {
   });
 };
 
-var getGitHubProfileAsync; // TODO
+var getGitHubProfileAsync = function(user) {
+  var options = {
+    url: 'https://api.github.com/users/' + user,
+    headers: { 'User-Agent': 'request' },
+    json: true  // will JSON.parse(body) for us
+  };
+  return new Promise((success, error) => {
+    request.get(options, (err, res, body) => {
+      if (err) {
+        error(err);
+      } else if (body.message) {
+        error(new Error('Failed to get GitHub profile: ' + body.message));
+      } else {
+        success(body);
+      }
+    });
+  });
+}
 
 
-// (2) Asyncronous token generation
+// (2) Asynchronous token generation
 var generateRandomToken = function(callback) {
   crypto.randomBytes(20, function(err, buffer) {
     if (err) { return callback(err, null); }
@@ -38,14 +55,20 @@ var generateRandomToken = function(callback) {
   });
 };
 
-var generateRandomTokenAsync; // TODO
+var generateRandomTokenAsync = () => {
+  return new Promise((success, error) => {
+    crypto.randomBytes(20, function(err, buffer) {
+      if (err) { return error(err); }
+      success(buffer.toString('hex'));
+    });
+  })
+}
 
-
-// (3) Asyncronous file manipulation
+// (3) Asynchronous file manipulation
 var readFileAndMakeItFunny = function(filePath, callback) {
   fs.readFile(filePath, 'utf8', function(err, file) {
     if (err) { return callback(err); }
-   
+
     var funnyFile = file.split('\n')
       .map(function(line) {
         return line + ' lol';
