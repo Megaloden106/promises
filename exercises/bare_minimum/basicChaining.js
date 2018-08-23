@@ -25,20 +25,20 @@ var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
     promiseConstructor.pluckFirstLineFromFileAsync(readFilePath)
       // (2) sends a request to the GitHub API for the user's profile
       .then(function(user) { // user is getting sent in from the success of the prev line
-        return promisification.getGitHubProfileAsync(user)
+        return promisification.getGitHubProfileAsync(user);
       })
       // (3) writes the JSON response of the API to `writeFilePath`
-      .then(function(body){
-        fs.writeFile(writeFilePath, JSON.stringify(body), function(err){
-          if(err) {
+      .then(function(body) {
+        fs.writeFile(writeFilePath, JSON.stringify(body), function(err) {
+          if (err) {
             error(err);
           } else {
             success('success');
             // i had been console logging but we needed to return success()
           }
         });
-    });
-  })
+      });
+  });
 };
 
 // Export these functions so we can test them
